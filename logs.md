@@ -393,3 +393,57 @@ Time elapsed 2.23 min
 Memory used: 2.83 GB
 Test accuracy 96.22%
 ```
+
+
+
+## 07_fabric-vit-mixed-fsdp-with-scheduler.py
+
+Like `06_fabric-vit-mixed-fsdp.py` above but using a learning rate scheduler.
+
+
+
+```
+Epoch: 0001/0003 | Batch 0000/0703 | Loss: 2.2974
+Epoch: 0001/0003 | Batch 0000/0703 | Loss: 2.3568
+Epoch: 0001/0003 | Batch 0000/0703 | Loss: 2.4056
+Epoch: 0001/0003 | Batch 0000/0703 | Loss: 2.4210
+Epoch: 0001/0003 | Batch 0300/0703 | Loss: 0.0243
+Epoch: 0001/0003 | Batch 0300/0703 | Loss: 0.0503
+Epoch: 0001/0003 | Batch 0300/0703 | Loss: 0.0400
+Epoch: 0001/0003 | Batch 0300/0703 | Loss: 0.0704
+Epoch: 0001/0003 | Batch 0600/0703 | Loss: 0.2057
+Epoch: 0001/0003 | Batch 0600/0703 | Loss: 0.0352
+Epoch: 0001/0003 | Batch 0600/0703 | Loss: 0.0217
+Epoch: 0001/0003 | Batch 0600/0703 | Loss: 0.0306
+Epoch: 0001/0003 | Train acc.: 93.65% | Val acc.: 95.74%
+Epoch: 0002/0003 | Batch 0000/0703 | Loss: 0.0124
+Epoch: 0002/0003 | Batch 0000/0703 | Loss: 0.0102
+Epoch: 0002/0003 | Batch 0000/0703 | Loss: 0.0907
+Epoch: 0002/0003 | Batch 0000/0703 | Loss: 0.0597
+Epoch: 0002/0003 | Batch 0300/0703 | Loss: 0.0815
+Epoch: 0002/0003 | Batch 0300/0703 | Loss: 0.0201
+Epoch: 0002/0003 | Batch 0300/0703 | Loss: 0.0039
+Epoch: 0002/0003 | Batch 0300/0703 | Loss: 0.0473
+Epoch: 0002/0003 | Batch 0600/0703 | Loss: 0.0371
+Epoch: 0002/0003 | Batch 0600/0703 | Loss: 0.1221
+Epoch: 0002/0003 | Batch 0600/0703 | Loss: 0.1342
+Epoch: 0002/0003 | Batch 0600/0703 | Loss: 0.0045
+Epoch: 0002/0003 | Train acc.: 97.72% | Val acc.: 96.36%
+Epoch: 0003/0003 | Batch 0000/0703 | Loss: 0.0131
+Epoch: 0003/0003 | Batch 0000/0703 | Loss: 0.0122
+Epoch: 0003/0003 | Batch 0000/0703 | Loss: 0.0182
+Epoch: 0003/0003 | Batch 0000/0703 | Loss: 0.1417
+Epoch: 0003/0003 | Batch 0300/0703 | Loss: 0.0021
+Epoch: 0003/0003 | Batch 0300/0703 | Loss: 0.0317
+Epoch: 0003/0003 | Batch 0300/0703 | Loss: 0.0491
+Epoch: 0003/0003 | Batch 0300/0703 | Loss: 0.0174
+Epoch: 0003/0003 | Batch 0600/0703 | Loss: 0.0013
+Epoch: 0003/0003 | Batch 0600/0703 | Loss: 0.0062
+Epoch: 0003/0003 | Batch 0600/0703 | Loss: 0.0013
+Epoch: 0003/0003 | Batch 0600/0703 | Loss: 0.0303
+Epoch: 0003/0003 | Train acc.: 98.66% | Val acc.: 95.60%
+Time elapsed 2.26 min
+Memory used: 2.83 GB
+Test accuracy 96.43%
+```
+
