@@ -101,7 +101,9 @@ if __name__ == "__main__":
 
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-5)
     scheduler = ExponentialLR(optimizer, gamma=0.9)
-    model, optimizer, scheduler = fabric.setup(model, optimizer, scheduler)
+    #model, optimizer = fabric.setup(model, optimizer)
+    model = fabric.setup_module(model)
+    optimizer = fabric.setup_optimizers(optimizer)
 
     #########################################
     ### 3 Finetuning
