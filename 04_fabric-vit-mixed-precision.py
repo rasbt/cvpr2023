@@ -21,11 +21,11 @@ def train(num_epochs, model, optimizer, train_loader, val_loader, fabric):
         model.train()
         for batch_idx, (features, targets) in enumerate(train_loader):
             model.train()
-            
-            ### FORWARD AND BACK PROP   
+
+            ### FORWARD AND BACK PROP
             logits = model(features)
             loss = F.cross_entropy(logits, targets)
-            
+
             optimizer.zero_grad()
             fabric.backward(loss)
 
@@ -61,9 +61,6 @@ if __name__ == "__main__":
     print("Torch CUDA available?", torch.cuda.is_available())
     torch.set_float32_matmul_precision("medium")
 
-    fabric = Fabric(accelerator="cuda", devices=1, precision="bf16-mixed")
-    fabric.launch()
-
     L.seed_everything(123)
 
     ##########################
@@ -72,21 +69,19 @@ if __name__ == "__main__":
     train_transforms = transforms.Compose([transforms.Resize((224, 224)),
                                            #transforms.RandomCrop((224, 224)),
                                            transforms.ToTensor()])
-    
+
     test_transforms = transforms.Compose([transforms.Resize((224, 224)),
                                           #transforms.CenterCrop((224, 224)),
                                           transforms.ToTensor()])
-    
+
     train_loader, val_loader, test_loader = get_dataloaders_cifar10(
-        batch_size=16, 
-        num_workers=4, 
+        batch_size=16,
+        num_workers=4,
         train_transforms=train_transforms,
         test_transforms=test_transforms,
-        validation_fraction=0.1)
-    
-    train_loader, val_loader, test_loader = fabric.setup_dataloaders(
-        train_loader, val_loader, test_loader)
-
+        validation_fraction=0.1,
+        download=True
+    )
 
     #########################################
     ### 2 Initializing the Model
@@ -98,10 +93,22 @@ if __name__ == "__main__":
     model.heads.head = torch.nn.Linear(in_features=768, out_features=10)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=5e-5)
+
+
+    #########################################
+    ### 3 Launch Fabric
+    #########################################
+
+    fabric = Fabric(accelerator="cuda", devices=1, precision="bf16-mixed")
+    fabric.launch()
+
+    train_loader, val_loader, test_loader = fabric.setup_dataloaders(
+        train_loader, val_loader, test_loader)
+
     model, optimizer = fabric.setup(model, optimizer)
 
     #########################################
-    ### 3 Finetuning
+    ### 4 Finetuning
     #########################################
 
     start = time.time()
@@ -111,18 +118,18 @@ if __name__ == "__main__":
         optimizer=optimizer,
         train_loader=train_loader,
         val_loader=val_loader,
-        fabric=fabric
+        fabric=fabric,
     )
 
     end = time.time()
     elapsed = end-start
-    print(f"Time elapsed {elapsed/60:.2f} min")
-    print(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
+    fabric.print(f"Time elapsed {elapsed/60:.2f} min")
+    fabric.print(f"Memory used: {torch.cuda.max_memory_reserved() / 1e9:.02f} GB")
 
     #########################################
-    ### 4 Evaluation
+    ### 5 Evaluation
     #########################################
-    
+
     with torch.no_grad():
         model.eval()
         test_acc = torchmetrics.Accuracy(task="multiclass", num_classes=10).to(fabric.device)
@@ -132,4 +139,4 @@ if __name__ == "__main__":
             predicted_labels = torch.argmax(outputs, 1)
             test_acc.update(predicted_labels, targets)
 
-    print(f"Test accuracy {test_acc.compute()*100:.2f}%")
+    fabric.print(f"Test accuracy {test_acc.compute()*100:.2f}%")
