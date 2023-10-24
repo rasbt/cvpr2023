@@ -33,8 +33,8 @@ def get_dataloaders_cifar10(batch_size, num_workers=0,
 
     if validation_fraction is not None:
         num = int(validation_fraction * 50000)
-        train_indices = torch.arange(0, 50000 - num)
-        valid_indices = torch.arange(50000 - num, 50000)
+        train_indices = range(0, 50000 - num)
+        valid_indices = range(50000 - num, 50000)
 
         train_sampler = SubsetRandomSampler(train_indices)
         valid_sampler = SubsetRandomSampler(valid_indices)
